@@ -25,7 +25,15 @@ function App() {
 
       const data = await response.json();
       let transformedData = []
-      for(let key in data){transformedData.push(data[key])}
+      for(let key in data){
+        transformedData.push({
+          id: key,
+          firstName: data[key].firstName,
+          lastName: data[key].lastName,
+          email: data[key].email,
+          phoneNumber: data[key].phoneNumber,
+        })
+      }
       setContacts(transformedData);
     }
     catch(error)
@@ -39,8 +47,23 @@ function App() {
     fetchContactsHandler();
   },[fetchContactsHandler])
 
-  function addContactHandler(contact) {
-    console.log(contact);
+  async function addContactHandler(contact) {
+
+    try{
+        const response = await fetch("https://testing-f9137-default-rtdb.firebaseio.com/contacts.json", {
+        method: 'POST',
+        body: JSON.stringify(contact),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      const data = await response.json();
+      console.log(data)
+    }
+    catch(error)
+    {
+      setError(error.message);
+    }
   }
 
   let content = <p>Not found any contacts..</p>;
