@@ -64,7 +64,9 @@ function App() {
     {
       setError(error.message);
     }
+    fetchContactsHandler();
   }
+
 
   let content = <p>Not found any contacts..</p>;
 
@@ -85,9 +87,9 @@ function App() {
       <section>
         <AddContact onAddContact={addContactHandler}/>
       </section>
-      <section>
+      {/* <section>
         <button onClick={fetchContactsHandler}>Fetch Contacts</button>
-      </section>
+      </section> */}
       <section>{content}</section>
     </React.Fragment>
   );
