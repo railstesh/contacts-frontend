@@ -23,18 +23,46 @@ function App() {
 
   const [contacts, setContacts] = useState([]);
   const [isLoading, setIsloading] = useState(false);
+  const [error, setError] = useState(null);
 
   async function fetchContactsHandler(){
     setIsloading(true);
+    setError(null);
 
-    // for now using firebase database will replace with backend host once backend code is implemented.
-    const response = await fetch("https://testing-f9137-default-rtdb.firebaseio.com/contacts.json")
-    const data = await response.json();
+    try
+    {
+      // for now using firebase database will replace with backend host once backend code is implemented.
+      const response = await fetch("https://testing-f9137-default-rtdb.firebaseio.com/contacts.json")
 
-    let transformedData = []
-    for(let key in data){transformedData.push(data[key])}
-    setContacts(transformedData);
+      if(!response.ok)
+      {
+        throw new Error("Something goes wrong!");
+      }
+
+      const data = await response.json();
+      let transformedData = []
+      for(let key in data){transformedData.push(data[key])}
+      setContacts(transformedData);
+    }
+    catch(error)
+    {
+      setError(error.message);
+    }
     setIsloading(false);
+  }
+
+  let content = <p>Not found any contacts..</p>;
+
+  if (contacts.length > 0) {
+    content = <ContactList contacts={contacts} />;
+  }
+
+  if (error) {
+    content = <p>{error}</p>;
+  }
+
+  if (isLoading) {
+    content = <p>Loading .........</p>;
   }
 
   return (
@@ -42,11 +70,7 @@ function App() {
       <section>
         <button onClick={fetchContactsHandler}>Fetch Contacts</button>
       </section>
-      <section>
-        {!isLoading && contacts.length > 0 &&< ContactList contacts={contacts} />}
-        {!isLoading && contacts.length === 0 && <p>Found no contacts.</p>}
-        {isLoading && <p>Loading ...</p>}
-      </section>
+      <section>{content}</section>
     </React.Fragment>
   );
 }
