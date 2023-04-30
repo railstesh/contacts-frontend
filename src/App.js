@@ -23,15 +23,14 @@ function App() {
 
   const [contacts, setContacts] = useState([]);
 
-  function fetchContactsHandler(){
+  async function fetchContactsHandler(){
     // for now using firebase database will replace with backend host once backend code is implemented.
-    fetch("https://testing-f9137-default-rtdb.firebaseio.com/contacts.json").then(response => {
-      return response.json();
-    }).then(data => {
-      const transformedData = []
-      for(let key in data){transformedData.push(data[key])}
-      setContacts(transformedData);
-    })
+    const response = await fetch("https://testing-f9137-default-rtdb.firebaseio.com/contacts.json")
+    const data = await response.json();
+
+    let transformedData = []
+    for(let key in data){transformedData.push(data[key])}
+    setContacts(transformedData);
   }
 
   return (
