@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback} from 'react';
 
 import ContactList from './components/ContactList';
 import './App.css';
+import AddContact from './components/AddContact';
 
 function App() {
   const [contacts, setContacts] = useState([]);
@@ -38,6 +39,10 @@ function App() {
     fetchContactsHandler();
   },[fetchContactsHandler])
 
+  function addContactHandler(contact) {
+    console.log(contact);
+  }
+
   let content = <p>Not found any contacts..</p>;
 
   if (contacts.length > 0) {
@@ -54,6 +59,9 @@ function App() {
 
   return (
     <React.Fragment>
+      <section>
+        <AddContact onAddContact={addContactHandler}/>
+      </section>
       <section>
         <button onClick={fetchContactsHandler}>Fetch Contacts</button>
       </section>
