@@ -1,31 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback} from 'react';
 
 import ContactList from './components/ContactList';
 import './App.css';
 
 function App() {
-  // const dummyContacts = [
-  //   {
-  //     id: 1,
-  //     firstName: "John",
-  //     lastName: "Wick",
-  //     email: "johnwick@gmail.com",
-  //     phoneNumber: "+91 9981239889",
-  //   },
-  //   {
-  //     id: 2,
-  //     firstName: "Jack",
-  //     lastName: "Tan",
-  //     email: "jacktan@gmail.com",
-  //     phoneNumber: "+91 99812394343",
-  //   },
-  // ];
-
   const [contacts, setContacts] = useState([]);
   const [isLoading, setIsloading] = useState(false);
   const [error, setError] = useState(null);
 
-  async function fetchContactsHandler(){
+  const fetchContactsHandler = useCallback(async () => {
     setIsloading(true);
     setError(null);
 
@@ -49,7 +32,11 @@ function App() {
       setError(error.message);
     }
     setIsloading(false);
-  }
+  }, []);
+
+  useEffect(() => {
+    fetchContactsHandler();
+  },[fetchContactsHandler])
 
   let content = <p>Not found any contacts..</p>;
 
