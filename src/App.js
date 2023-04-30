@@ -22,8 +22,11 @@ function App() {
   // ];
 
   const [contacts, setContacts] = useState([]);
+  const [isLoading, setIsloading] = useState(false);
 
   async function fetchContactsHandler(){
+    setIsloading(true);
+
     // for now using firebase database will replace with backend host once backend code is implemented.
     const response = await fetch("https://testing-f9137-default-rtdb.firebaseio.com/contacts.json")
     const data = await response.json();
@@ -31,6 +34,7 @@ function App() {
     let transformedData = []
     for(let key in data){transformedData.push(data[key])}
     setContacts(transformedData);
+    setIsloading(false);
   }
 
   return (
@@ -39,7 +43,9 @@ function App() {
         <button onClick={fetchContactsHandler}>Fetch Contacts</button>
       </section>
       <section>
-        <ContactList contacts={contacts} />
+        {!isLoading && contacts.length > 0 &&< ContactList contacts={contacts} />}
+        {!isLoading && contacts.length === 0 && <p>Found no contacts.</p>}
+        {isLoading && <p>Loading ...</p>}
       </section>
     </React.Fragment>
   );
