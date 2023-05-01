@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 
 import classes from './AddContact.module.css';
 
@@ -11,18 +11,57 @@ function AddContact(props) {
   function submitHandler(event) {
     event.preventDefault();
 
-    // could add validation here...
+    // Get input values
+    const firstName = firstNameRef.current.value.trim();
+    const lastName = lastNameRef.current.value.trim();
+    const email = emailRef.current.value.trim();
+    const phoneNumber = phoneNumberRef.current.value.trim();
 
+    // Validate input
+    if (!firstName) {
+      alert('Please enter a first name.');
+      return;
+    }
+    if (!lastName) {
+      alert('Please enter a last name.');
+      return;
+    }
+    if (!email) {
+      alert('Please enter an email.');
+      return;
+    }
+    if (!phoneNumber) {
+      alert('Please enter a phone number.');
+      return;
+    }
+
+    // Validate email format
+    const emailRegex = /\S+@\S+\.\S+/;
+    if (!emailRegex.test(email)) {
+      alert('Please enter a valid email address.');
+      return;
+    }
+
+    // Validate phone number format
+    const phoneRegex = /^\d{10}$/;
+    if (!phoneRegex.test(phoneNumber)) {
+      alert('Please enter a valid phone number (10 digits).');
+      return;
+    }
+
+    // Create contact object
     const contact = {
-      first_name: firstNameRef.current.value,
-      last_name: lastNameRef.current.value,
-      email: emailRef.current.value,
-      phone_number: phoneNumberRef.current.value,
+      first_name: firstName,
+      last_name: lastName,
+      email: email,
+      phone_number: phoneNumber,
     };
 
+    // Add contact
     props.onAddContact(contact);
     resetForm();
   }
+
 
   function resetForm()
   {

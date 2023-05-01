@@ -61,7 +61,13 @@ function Home() {
         }
       })
       const data = await response.json();
-      console.log(data)
+      if(data['status'] === 'ok')
+      {
+        console.log(data);
+      }
+      else{
+        setError(data['message']);
+      }
     }
     catch(error)
     {
@@ -88,7 +94,7 @@ function Home() {
   return (
     <React.Fragment>
       <section>
-        <AddContact onAddContact={addContactHandler}/>
+        <AddContact onAddContact={addContactHandler} error={error}/>
       </section>
       <section>{content}</section>
     </React.Fragment>
