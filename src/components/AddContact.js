@@ -14,10 +14,10 @@ function AddContact(props) {
     // could add validation here...
 
     const contact = {
-      firstName: firstNameRef.current.value,
-      lastName: lastNameRef.current.value,
+      first_name: firstNameRef.current.value,
+      last_name: lastNameRef.current.value,
       email: emailRef.current.value,
-      phoneNumber: phoneNumberRef.current.value,
+      phone_number: phoneNumberRef.current.value,
     };
 
     props.onAddContact(contact);
