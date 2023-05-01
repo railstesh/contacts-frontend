@@ -9,6 +9,7 @@ const ContactList = (props) => {
       {props.contacts.map((contact) => (
         <Contact
           key={contact.id}
+          id={contact.id}
           firstName={contact.firstName}
           lastName={contact.lastName}
           email={contact.email}

@@ -13,7 +13,7 @@ const Contact = (props) => {
       <p>{props.phoneNumber}</p>
     </li>
     <section>
-      <Link to="/edit">Edit Contact</Link>
+      <Link to={`/contact/${props.id}/edit`}>Edit Contact</Link>
     </section>
     </>
   );
