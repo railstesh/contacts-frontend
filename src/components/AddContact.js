@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 
 import classes from './AddContact.module.css';
 
@@ -7,8 +7,9 @@ function AddContact(props) {
   const lastNameRef = useRef('');
   const emailRef = useRef('');
   const phoneNumberRef = useRef('');
+  const [error, setError] = useState(null)
 
-  function submitHandler(event) {
+  async function submitHandler(event) {
     event.preventDefault();
 
     // Get input values
@@ -18,34 +19,11 @@ function AddContact(props) {
     const phoneNumber = phoneNumberRef.current.value.trim();
 
     // Validate input
-    if (!firstName) {
-      alert('Please enter a first name.');
-      return;
-    }
-    if (!lastName) {
-      alert('Please enter a last name.');
-      return;
-    }
-    if (!email) {
-      alert('Please enter an email.');
-      return;
-    }
-    if (!phoneNumber) {
-      alert('Please enter a phone number.');
-      return;
-    }
+    let validate_message = validateInput(firstName, lastName, email, phoneNumber);
 
-    // Validate email format
-    const emailRegex = /\S+@\S+\.\S+/;
-    if (!emailRegex.test(email)) {
-      alert('Please enter a valid email address.');
-      return;
-    }
-
-    // Validate phone number format
-    const phoneRegex = /^\d{10}$/;
-    if (!phoneRegex.test(phoneNumber)) {
-      alert('Please enter a valid phone number (10 digits).');
+    if(validate_message)
+    {
+      alert(validate_message)
       return;
     }
 
@@ -58,10 +36,35 @@ function AddContact(props) {
     };
 
     // Add contact
-    props.onAddContact(contact);
+    const res = await props.onAddContact(contact);
+    console.log('res', res);
+    setError(res)
     resetForm();
   }
 
+  function validateInput(firstName, lastName, email, phoneNumber) {
+    if (!firstName) {
+      return 'Please enter a first name.';
+    }
+    if (!lastName) {
+      return 'Please enter a last name.';
+    }
+    if (!email) {
+      return 'Please enter an email.';
+    }
+    if (!phoneNumber) {
+      return 'Please enter a phone number.';
+    }
+    const emailRegex = /\S+@\S+\.\S+/;
+    if (!emailRegex.test(email)) {
+      return 'Please enter a valid email address.';
+    }
+    const phoneRegex = /^\d{10}$/;
+    if (!phoneRegex.test(phoneNumber)) {
+      return 'Please enter a valid phone number (10 digits).';
+    }
+    return null;
+  }
 
   function resetForm()
   {
@@ -70,6 +73,8 @@ function AddContact(props) {
     emailRef.current.value = ''
     phoneNumberRef.current.value = ''
   }
+
+  console.log(props)
 
   return (
     <form onSubmit={submitHandler}>
@@ -90,6 +95,7 @@ function AddContact(props) {
         <input type='number' id='phoneNumber' ref={phoneNumberRef}/>
       </div>
       <button>Add Contact</button>
+      {error && <p>{error}</p>}
     </form>
   );
 }

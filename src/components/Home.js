@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import ContactList from './ContactList';
 import '../App.css';
@@ -13,8 +13,7 @@ function Home() {
     setIsloading(true);
     setError(null);
 
-    try
-    {
+    try {
       // v1 : for now using firebase database will replace with backend host once backend code is implemented.
       // v2 : for now using localhost backend database will replace with backend host once backend code is deployed.
 
@@ -23,8 +22,7 @@ function Home() {
         'Content-Type': 'application/json'
       })
 
-      if(!response.ok)
-      {
+      if (!response.ok) {
         throw new Error("Something goes wrong!");
       }
 
@@ -39,8 +37,7 @@ function Home() {
       }))
       setContacts(transformedData);
     }
-    catch(error)
-    {
+    catch (error) {
       setError(error.message);
     }
     setIsloading(false);
@@ -48,12 +45,12 @@ function Home() {
 
   useEffect(() => {
     fetchContactsHandler();
-  },[fetchContactsHandler])
+  }, [fetchContactsHandler])
 
   async function addContactHandler(contact) {
 
-    try{
-        const response = await fetch("http://localhost:3001/contacts", {
+    try {
+      const response = await fetch("http://localhost:3001/contacts", {
         method: 'POST',
         body: JSON.stringify(contact),
         headers: {
@@ -61,16 +58,15 @@ function Home() {
         }
       })
       const data = await response.json();
-      if(data['status'] === 'ok')
-      {
+      if (data['status'] === 'ok') {
         console.log(data);
       }
-      else{
-        setError(data['message']);
+      else {
+        console.log(data);
+        return data['message'];
       }
     }
-    catch(error)
-    {
+    catch (error) {
       setError(error.message);
     }
     fetchContactsHandler();
@@ -94,7 +90,7 @@ function Home() {
   return (
     <React.Fragment>
       <section>
-        <AddContact onAddContact={addContactHandler} error={error}/>
+        <AddContact onAddContact={addContactHandler} />
       </section>
       <section>{content}</section>
     </React.Fragment>

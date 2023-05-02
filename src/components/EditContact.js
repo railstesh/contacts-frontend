@@ -12,6 +12,7 @@ function EditContact(props) {
 
   const [editVersions, setEditVersions] = useState([]);
   const [isLoading, setIsloading] = useState(false);
+  const [validationError, setValidationError] = useState(null);
   const [error, setError] = useState(null);
 
   const params = useParams();
@@ -135,10 +136,15 @@ function EditContact(props) {
       })
       const data = await response.json();
       console.log(data)
+      if(data['status'] == 'unprocessable_entity')
+      {
+        console.log(data['message']);
+        setValidationError(data['message']);
+      }
     }
     catch(error)
     {
-      // setError(error.message);
+      //setError(data['message']);
     }
     fetchEditVersionsHandler();
   }
@@ -177,6 +183,7 @@ function EditContact(props) {
             <label htmlFor='phoneNumber'>Phone Number</label>
             <input type='number' id='phoneNumber' ref={phoneNumberRef}/>
           </div>
+          {validationError && <p>{validationError}</p>}
           <button>Edit Contact</button>
         </form>
       </section>
